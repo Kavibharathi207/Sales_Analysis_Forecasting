@@ -1,11 +1,12 @@
 pandas
-   numpy
-   prophet
-   statsmodels
-   scikit-learn
-   matplotlib
-   streamlit
-   plotly
-   flask
-   fastapi
-   uvicorn
+numpy
+prophet
+statsmodels
+scikit-learn
+matplotlib
+streamlit
+plotly
+fastapi
+uvicorn
+pydantic
+lightgbm
