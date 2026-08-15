@@ -8,9 +8,14 @@ router = APIRouter(prefix="/api/what-if", tags=["What-If Analysis"])
 @router.post("", response_model=WhatIfResponse)
 def what_if(request: WhatIfRequest):
     """
-    Apply a scenario to a forecast series.
+    Apply a demand scenario to teammate's forecast output.
 
-    - change_percent: uniform % shift (e.g. 20 = +20%, -15 = -15%)
-    - disruption_start/end: date range where supply is zeroed out
+    Loads from disk:
+    - data/outputs/forecasts/{category}_{model}_forecast.csv
+
+    Scenario parameters:
+    - change_percent    : uniform % shift on all forecast values
+    - disruption_start  : (optional) start of supply disruption window
+    - disruption_end    : (optional) end of supply disruption window (zeroed out)
     """
     return run_what_if(request)

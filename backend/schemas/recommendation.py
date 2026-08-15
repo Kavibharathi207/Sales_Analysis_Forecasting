@@ -2,31 +2,22 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-class ForecastPoint(BaseModel):
-    date: str
-    predicted_sales: float
-
-
-class AnomalySummary(BaseModel):
-    anomaly_count: int
-    high_severity_count: int
-
-
 class RecommendationRequest(BaseModel):
-    product: str
-    forecast: List[ForecastPoint]
-    anomaly_summary: Optional[AnomalySummary] = None
-    model_mape: Optional[float] = None          # from evaluation CSV
+    category: str   # e.g. "M01AB"
+    model: str      # e.g. "prophet"
 
 
 class Recommendation(BaseModel):
-    signal: str          # e.g. "RESTOCK_ALERT"
-    priority: str        # "HIGH" | "MEDIUM" | "LOW"
-    recommendation: str  # human-readable action
-    rationale: str       # why this was triggered
+    signal: str         # e.g. "RESTOCK_ALERT"
+    priority: str       # "HIGH" | "MEDIUM" | "LOW"
+    recommendation: str
+    rationale: str
 
 
 class RecommendationResponse(BaseModel):
-    product: str
+    category: str
+    model: str
     forecast_trend_pct: float
+    model_mape: Optional[float]
+    anomaly_count: int
     recommendations: List[Recommendation]

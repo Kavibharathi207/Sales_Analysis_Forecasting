@@ -2,17 +2,12 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-class ForecastPoint(BaseModel):
-    date: str
-    predicted_sales: float
-
-
 class WhatIfRequest(BaseModel):
-    product: str
-    forecast: List[ForecastPoint]
-    change_percent: float                        # e.g. 20 = +20%, -15 = -15%
-    disruption_start: Optional[str] = None      # YYYY-MM-DD
-    disruption_end: Optional[str] = None        # YYYY-MM-DD
+    category: str           # e.g. "M01AB"
+    model: str              # e.g. "prophet"
+    change_percent: float   # e.g. 20 = +20%, -15 = -15%
+    disruption_start: Optional[str] = None   # YYYY-MM-DD
+    disruption_end: Optional[str] = None     # YYYY-MM-DD
 
 
 class WhatIfPoint(BaseModel):
@@ -24,7 +19,8 @@ class WhatIfPoint(BaseModel):
 
 
 class WhatIfResponse(BaseModel):
-    product: str
+    category: str
+    model: str
     change_percent: float
     total_baseline: float
     total_adjusted: float

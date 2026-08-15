@@ -1,21 +1,10 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 
 
-class ForecastPoint(BaseModel):
-    date: str
-    predicted_sales: float
-
-
-class ActualPoint(BaseModel):
-    date: str
-    actual_sales: float
-
-
-class AnomalyDetectRequest(BaseModel):
-    product: str
-    forecast: List[ForecastPoint]
-    actuals: List[ActualPoint]
+class AnomalyRequest(BaseModel):
+    category: str   # e.g. "M01AB"
+    model: str      # e.g. "prophet"
 
 
 class AnomalyResult(BaseModel):
@@ -23,12 +12,13 @@ class AnomalyResult(BaseModel):
     actual_sales: float
     forecast_sales: float
     deviation_percent: float
-    status: str        # "normal" | "moderate" | "anomaly"
-    severity: str      # "low" | "medium" | "high"
+    status: str     # "normal" | "moderate" | "anomaly"
+    severity: str   # "low" | "medium" | "high"
 
 
-class AnomalyDetectResponse(BaseModel):
-    product: str
+class AnomalyResponse(BaseModel):
+    category: str
+    model: str
     total_days: int
     anomaly_count: int
     results: List[AnomalyResult]

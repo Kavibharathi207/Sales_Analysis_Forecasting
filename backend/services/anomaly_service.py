@@ -1,50 +1,44 @@
 """
 anomaly_service.py
 ==================
-Business logic for anomaly detection.
+Loads teammate's forecast CSV + actual sales CSV from disk,
+joins them on date, then computes deviation-based anomaly detection.
 
-Algorithm
----------
-deviation_percent = abs(actual - forecast) / forecast * 100
+Algorithm:
+    deviation_percent = abs(actual - forecast) / forecast * 100
 
-Thresholds (agreed team rules — adjust as needed):
-  < 10%   → normal
-  10–25%  → moderate  (low severity)
-  > 25%   → anomaly   (medium if 25–50%, high if > 50%)
+Thresholds (agreed team rules):
+    < 10%       → normal    (low)
+    10 – 25%    → moderate  (low)
+    25 – 50%    → anomaly   (medium)
+    > 50%       → anomaly   (high)
 """
 
-from typing import List
-from backend.schemas.anomaly import (
-    AnomalyDetectRequest,
-    AnomalyDetectResponse,
-    AnomalyResult,
-)
-
+from backend.data_loader import load_test_period, load_actuals
+from backend.schemas.anomaly import AnomalyRequest, AnomalyResponse, AnomalyResult
 
 MODERATE_THRESHOLD = 10.0
-ANOMALY_THRESHOLD = 25.0
-HIGH_THRESHOLD = 50.0
+ANOMALY_THRESHOLD  = 25.0
+HIGH_THRESHOLD     = 50.0
 
 
-def detect_anomalies(request: AnomalyDetectRequest) -> AnomalyDetectResponse:
-    # Build lookup: date → actual_sales
-    actual_map = {a.date: a.actual_sales for a in request.actuals}
+def detect_anomalies(request: AnomalyRequest) -> AnomalyResponse:
+    # Load from disk — teammate's output + actual sales
+    forecast_df = load_test_period(request.category, request.model)
+    actuals_df  = load_actuals(request.category)
 
-    results: List[AnomalyResult] = []
+    # Join on date — only dates present in both
+    merged = forecast_df.merge(actuals_df, on="date", how="inner")
 
-    for fp in request.forecast:
-        actual = actual_map.get(fp.date)
-        if actual is None:
-            continue  # no actual for this date — skip
+    results = []
+    for _, row in merged.iterrows():
+        forecast = row["predicted_sales"]
+        actual   = row["actual_sales"]
 
-        forecast = fp.predicted_sales
-
-        # Avoid division by zero
         if forecast == 0:
             deviation = 0.0 if actual == 0 else 100.0
         else:
             deviation = abs(actual - forecast) / forecast * 100
-
         deviation = round(deviation, 2)
 
         if deviation < MODERATE_THRESHOLD:
@@ -57,9 +51,9 @@ def detect_anomalies(request: AnomalyDetectRequest) -> AnomalyDetectResponse:
             status, severity = "anomaly", "high"
 
         results.append(AnomalyResult(
-            date=fp.date,
-            actual_sales=actual,
-            forecast_sales=round(forecast, 4),
+            date=row["date"],
+            actual_sales=round(float(actual), 4),
+            forecast_sales=round(float(forecast), 4),
             deviation_percent=deviation,
             status=status,
             severity=severity,
@@ -67,8 +61,9 @@ def detect_anomalies(request: AnomalyDetectRequest) -> AnomalyDetectResponse:
 
     anomaly_count = sum(1 for r in results if r.status == "anomaly")
 
-    return AnomalyDetectResponse(
-        product=request.product,
+    return AnomalyResponse(
+        category=request.category,
+        model=request.model,
         total_days=len(results),
         anomaly_count=anomaly_count,
         results=results,
