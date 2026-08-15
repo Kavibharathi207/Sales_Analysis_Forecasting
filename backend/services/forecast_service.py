@@ -1,8 +1,7 @@
-import numpy as np
 import pandas as pd
 from typing import Any, List, Dict
 
-from src.backend.config import FORECASTS_DIR
+from backend.config import FORECASTS_DIR
 
 
 def generate_forecast(model: Any, model_type: str, horizon: int, category: str = None, scaler=None) -> List[Dict]:
@@ -49,7 +48,6 @@ def _csv_forecast(model_type: str, category: str, horizon: int) -> List[Dict]:
         raise FileNotFoundError(f"Forecast CSV not found: {csv_path.name}")
 
     df = pd.read_csv(csv_path)
-    # Drop rows where y is not NaN (those are test-period rows, not future)
     if "y" in df.columns:
         df = df[df["y"].isna()].reset_index(drop=True)
 

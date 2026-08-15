@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator
 from typing import Literal
 
+
 class ForecastRequest(BaseModel):
     category: str
     model: Literal["prophet", "arima", "sarima", "lightgbm", "lstm"]
@@ -19,6 +20,7 @@ class ForecastRequest(BaseModel):
         if v <= 0:
             raise ValueError("horizon must be a positive integer")
         return v
+
 
 class CompareRequest(BaseModel):
     category: str

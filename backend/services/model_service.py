@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict
 
-from src.backend.config import MODELS_DIR, METRICS_FILE, MODEL_TYPES
+from backend.config import MODELS_DIR, METRICS_FILE, MODEL_TYPES
 
 logger = logging.getLogger(__name__)
 
@@ -18,18 +18,16 @@ class ModelService:
         self.metrics: Dict[str, Any] = {}
 
     def load_all(self):
-        if not MODELS_DIR.exists():
-            logger.warning("Models directory not found: %s", MODELS_DIR)
-            return
-
-        for pkl_file in MODELS_DIR.glob("*.pkl"):
-            self._load_pkl(pkl_file)
-
-        for keras_file in MODELS_DIR.glob("*.keras"):
-            self._load_keras(keras_file)
+        if MODELS_DIR.exists():
+            for pkl_file in MODELS_DIR.glob("*.pkl"):
+                self._load_pkl(pkl_file)
+            for keras_file in MODELS_DIR.glob("*.keras"):
+                self._load_keras(keras_file)
+            logger.info("Loaded models: %s", {k: list(v) for k, v in self.models.items() if v})
+        else:
+            logger.warning("Models directory not found: %s — skipping model loading", MODELS_DIR)
 
         self._load_metrics()
-        logger.info("Loaded models: %s", {k: list(v) for k, v in self.models.items() if v})
 
     def _load_pkl(self, path: Path):
         # filename pattern: {category}_{model_type}.pkl or {category}_scaler.pkl
