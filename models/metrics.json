@@ -1,0 +1,17 @@
+{
+  "M01AB": {
+    "prophet": { "MAE": 123.4, "RMSE": 180.5, "MAPE": 8.4 },
+    "arima":   { "MAE": 145.2, "RMSE": 210.7, "MAPE": 10.2 },
+    "best_model": "prophet"
+  },
+  "M01AE": {
+    "prophet": { "MAE": 98.1,  "RMSE": 140.3, "MAPE": 7.1 },
+    "arima":   { "MAE": 110.5, "RMSE": 160.8, "MAPE": 9.0 },
+    "best_model": "prophet"
+  },
+  "N02BA": {
+    "prophet": { "MAE": 200.0, "RMSE": 260.0, "MAPE": 12.0 },
+    "arima":   { "MAE": 185.0, "RMSE": 240.0, "MAPE": 11.0 },
+    "best_model": "arima"
+  }
+}
