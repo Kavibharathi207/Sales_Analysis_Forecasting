@@ -1,0 +1,426 @@
+{
+  "M01AB": {
+    "prophet": {
+      "MAE": 2.2566,
+      "RMSE": 2.9099,
+      "MAPE_%": 60.75,
+      "MAPE": 60.75
+    },
+    "arima": {
+      "p": 5.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 2.1893,
+      "RMSE": 2.5854,
+      "MAPE": 68.5274,
+      "n_zero_actuals": 0.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.6655,
+      "adf_pvalue": 0.0
+    },
+    "sarima": {
+      "order": "(3, 0, 3)",
+      "seasonal_order": "(0, 0, 1, 7)",
+      "MAE": 2.1517,
+      "RMSE": 2.5763,
+      "MAPE": 67.8749,
+      "n_zero_actuals": 0.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.2654,
+      "adf_pvalue": 0.0
+    },
+    "lightgbm": {
+      "MAE": 2.1881,
+      "RMSE": 2.8197,
+      "MAPE": 67.52,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 31, 'max_depth': 8, 'learning_rate': 0.1, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 2.2047,
+      "RMSE": 2.8236,
+      "MAPE": 67.37,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 23.0
+    },
+    "best_model": "prophet"
+  },
+  "M01AE": {
+    "prophet": {
+      "MAE": 1.6627,
+      "RMSE": 2.1889,
+      "MAPE_%": 93.78,
+      "MAPE": 93.78
+    },
+    "arima": {
+      "p": 3.0,
+      "d": 0.0,
+      "q": 4.0,
+      "MAE": 1.4175,
+      "RMSE": 1.8625,
+      "MAPE": 50.0303,
+      "n_zero_actuals": 1.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.8254,
+      "adf_pvalue": 0.0
+    },
+    "sarima": {
+      "order": "(0, 0, 3)",
+      "seasonal_order": "(1, 0, 1, 7)",
+      "MAE": 1.3882,
+      "RMSE": 1.8018,
+      "MAPE": 50.441,
+      "n_zero_actuals": 1.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.0932,
+      "adf_pvalue": 0.0
+    },
+    "lightgbm": {
+      "MAE": 1.6473,
+      "RMSE": 2.1236,
+      "MAPE": 101.33,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 31, 'max_depth': 5, 'learning_rate': 0.05, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 1.7339,
+      "RMSE": 2.2506,
+      "MAPE": 108.48,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 29.0
+    },
+    "best_model": "arima"
+  },
+  "N02BA": {
+    "prophet": {
+      "MAE": 1.586,
+      "RMSE": 2.09,
+      "MAPE_%": 76.36,
+      "MAPE": 76.36
+    },
+    "arima": {
+      "p": 4.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 1.6329,
+      "RMSE": 2.0627,
+      "MAPE": 70.5257,
+      "n_zero_actuals": 4.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.9786,
+      "adf_pvalue": 0.0
+    },
+    "sarima": {
+      "order": "(0, 0, 3)",
+      "seasonal_order": "(1, 0, 1, 7)",
+      "MAE": 1.7881,
+      "RMSE": 2.1832,
+      "MAPE": 81.4798,
+      "n_zero_actuals": 4.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.2251,
+      "adf_pvalue": 0.0
+    },
+    "lightgbm": {
+      "MAE": 1.6047,
+      "RMSE": 2.0387,
+      "MAPE": 113.15,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 63, 'max_depth': 8, 'learning_rate': 0.1, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 1.5258,
+      "RMSE": 1.9828,
+      "MAPE": 90.62,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 6.0
+    },
+    "best_model": "arima"
+  },
+  "N02BE": {
+    "prophet": {
+      "MAE": 10.3081,
+      "RMSE": 13.2939,
+      "MAPE_%": 41.49,
+      "MAPE": 41.49
+    },
+    "arima": {
+      "p": 5.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 9.5599,
+      "RMSE": 12.8177,
+      "MAPE": 29.0725,
+      "n_zero_actuals": 0.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.0138,
+      "adf_pvalue": 0.0032
+    },
+    "sarima": {
+      "order": "(1, 1, 2)",
+      "seasonal_order": "(1, 0, 2, 7)",
+      "MAE": 11.3816,
+      "RMSE": 15.3802,
+      "MAPE": 32.3632,
+      "n_zero_actuals": 0.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.0045,
+      "adf_pvalue": 0.0032
+    },
+    "lightgbm": {
+      "MAE": 9.3879,
+      "RMSE": 12.5757,
+      "MAPE": 34.05,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 31, 'max_depth': 5, 'learning_rate': 0.05, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 10.5982,
+      "RMSE": 14.0548,
+      "MAPE": 39.02,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 16.0
+    },
+    "best_model": "arima"
+  },
+  "N05B": {
+    "prophet": {
+      "MAE": 4.4715,
+      "RMSE": 5.3998,
+      "MAPE_%": 90.46,
+      "MAPE": 90.46
+    },
+    "arima": {
+      "p": 5.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 3.4019,
+      "RMSE": 3.7357,
+      "MAPE": 59.6322,
+      "n_zero_actuals": 0.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.7253,
+      "adf_pvalue": 0.0004
+    },
+    "sarima": {
+      "order": "(1, 0, 3)",
+      "seasonal_order": "(1, 0, 1, 7)",
+      "MAE": 3.1848,
+      "RMSE": 3.5229,
+      "MAPE": 54.2013,
+      "n_zero_actuals": 0.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.3419,
+      "adf_pvalue": 0.0004
+    },
+    "lightgbm": {
+      "MAE": 3.2024,
+      "RMSE": 4.0928,
+      "MAPE": 56.1,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 63, 'max_depth': 8, 'learning_rate': 0.1, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 3.3416,
+      "RMSE": 4.1844,
+      "MAPE": 60.05,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 16.0
+    },
+    "best_model": "sarima"
+  },
+  "N05C": {
+    "prophet": {
+      "MAE": 0.8335,
+      "RMSE": 1.1242,
+      "MAPE_%": 58.64,
+      "MAPE": 58.64
+    },
+    "arima": {
+      "p": 3.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 0.6782,
+      "RMSE": 0.8491,
+      "MAPE": 51.7347,
+      "n_zero_actuals": 19.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.9982,
+      "adf_pvalue": 0.0
+    },
+    "sarima": {
+      "order": "(3, 0, 3)",
+      "seasonal_order": "(0, 0, 1, 7)",
+      "MAE": 0.6749,
+      "RMSE": 0.8544,
+      "MAPE": 53.3693,
+      "n_zero_actuals": 19.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.4065,
+      "adf_pvalue": 0.0
+    },
+    "lightgbm": {
+      "MAE": 0.8227,
+      "RMSE": 1.1109,
+      "MAPE": 58.07,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 31, 'max_depth': 5, 'learning_rate': 0.05, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 0.832,
+      "RMSE": 1.115,
+      "MAPE": 58.58,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 8.0
+    },
+    "best_model": "arima"
+  },
+  "R03": {
+    "prophet": {
+      "MAE": 5.6898,
+      "RMSE": 8.2517,
+      "MAPE_%": 105.69,
+      "MAPE": 105.69
+    },
+    "arima": {
+      "p": 4.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 4.9677,
+      "RMSE": 7.8048,
+      "MAPE": 75.6722,
+      "n_zero_actuals": 5.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.8307,
+      "adf_pvalue": 0.0
+    },
+    "sarima": {
+      "order": "(1, 0, 3)",
+      "seasonal_order": "(0, 0, 1, 7)",
+      "MAE": 4.9679,
+      "RMSE": 7.7745,
+      "MAPE": 76.221,
+      "n_zero_actuals": 5.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.6918,
+      "adf_pvalue": 0.0
+    },
+    "lightgbm": {
+      "MAE": 5.6849,
+      "RMSE": 8.2616,
+      "MAPE": 103.84,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 63, 'max_depth': 8, 'learning_rate': 0.05, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 5.7161,
+      "RMSE": 8.1939,
+      "MAPE": 109.08,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 22.0
+    },
+    "best_model": "arima"
+  },
+  "R06": {
+    "prophet": {
+      "MAE": 1.7258,
+      "RMSE": 2.2292,
+      "MAPE_%": 72.91,
+      "MAPE": 72.91
+    },
+    "arima": {
+      "p": 4.0,
+      "d": 0.0,
+      "q": 5.0,
+      "MAE": 1.44,
+      "RMSE": 1.881,
+      "MAPE": 50.5376,
+      "n_zero_actuals": 2.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.4827,
+      "adf_pvalue": 0.0152
+    },
+    "sarima": {
+      "order": "(3, 0, 3)",
+      "seasonal_order": "(0, 0, 1, 7)",
+      "MAE": 1.5347,
+      "RMSE": 1.8669,
+      "MAPE": 69.8015,
+      "n_zero_actuals": 2.0,
+      "train_end": "2018-08-12",
+      "test_start": "2018-08-13",
+      "lb_pvalue": 0.4197,
+      "adf_pvalue": 0.0152
+    },
+    "lightgbm": {
+      "MAE": 1.6507,
+      "RMSE": 2.1938,
+      "MAPE": 62.37,
+      "train_end": "2018-08-18",
+      "test_start": "2018-08-19",
+      "model_params": "{'n_estimators': 300, 'num_leaves': 31, 'max_depth': 5, 'learning_rate': 0.05, 'subsample': 0.8, 'colsample_bytree': 0.8, 'reg_alpha': 0.1, 'reg_lambda': 0.1, 'min_child_samples': 20}"
+    },
+    "lstm": {
+      "MAE": 1.7295,
+      "RMSE": 2.2776,
+      "MAPE": 68.58,
+      "train_samples": 1613.0,
+      "test_samples": 404.0,
+      "lookback": 60.0,
+      "horizon": 30.0,
+      "units": 64.0,
+      "epochs_run": 31.0
+    },
+    "best_model": "arima"
+  }
+}
