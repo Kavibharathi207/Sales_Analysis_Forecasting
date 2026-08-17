@@ -241,7 +241,7 @@ def what_if_chart(what_if_data: dict) -> go.Figure:
 
 
 def mape_heatmap(metrics: dict) -> go.Figure:
-    """Heatmap of MAPE across categories × models."""
+    """Heatmap of MAE across categories × models."""
     categories = ["M01AB", "M01AE", "N02BA", "N02BE", "N05B", "N05C", "R03", "R06"]
     models = ["prophet", "arima", "sarima", "lightgbm", "lstm"]
 
@@ -251,7 +251,8 @@ def mape_heatmap(metrics: dict) -> go.Figure:
         cat_data = metrics.get(cat, {})
         for m in models:
             m_data = cat_data.get(m, {})
-            row.append(m_data.get("MAPE") or m_data.get("MAPE_%") or None)
+            v = m_data.get("MAE")
+            row.append(float(v) if v is not None else None)
         z.append(row)
 
     fig = go.Figure(go.Heatmap(
@@ -264,48 +265,48 @@ def mape_heatmap(metrics: dict) -> go.Figure:
             [0.7,  "#FF6B35"],
             [1.0,  "#FF4444"],
         ],
-        text=[[f"{v:.1f}%" if v is not None else "N/A" for v in row] for row in z],
+        text=[[f"{v:.2f}" if v is not None else "N/A" for v in row] for row in z],
         texttemplate="%{text}",
-        hovertemplate="<b>%{y}</b> · <b>%{x}</b><br>MAPE: %{z:.2f}%<extra></extra>",
+        hovertemplate="<b>%{y}</b> · <b>%{x}</b><br>MAE: %{z:.2f}<extra></extra>",
         showscale=True,
         colorbar=dict(
-            title=dict(text="MAPE %", font=dict(color="#F5F5F5")),
+            title=dict(text="MAE (units)", font=dict(color="#F5F5F5")),
             tickfont=dict(color="#F5F5F5"),
         ),
     ))
-    return _apply_dark(fig, "MAPE Heatmap — All Categories × Models")
+    return _apply_dark(fig, "MAE Heatmap — All Categories × Models")
 
 
 def model_bar_chart(metrics: dict) -> go.Figure:
-    """Average MAPE per model across all categories."""
+    """Average MAE per model across all categories."""
     categories = ["M01AB", "M01AE", "N02BA", "N02BE", "N05B", "N05C", "R03", "R06"]
     models = ["prophet", "arima", "sarima", "lightgbm", "lstm"]
 
-    avg_mapes = []
+    avg_maes = []
     for m in models:
         vals = []
         for cat in categories:
             cat_data = metrics.get(cat, {})
             m_data = cat_data.get(m, {})
-            v = m_data.get("MAPE") or m_data.get("MAPE_%")
+            v = m_data.get("MAE")
             if v is not None:
                 vals.append(float(v))
-        avg_mapes.append(round(sum(vals) / len(vals), 2) if vals else 0)
+        avg_maes.append(round(sum(vals) / len(vals), 2) if vals else 0)
 
     fig = go.Figure(go.Bar(
         x=[m.upper() for m in models],
-        y=avg_mapes,
+        y=avg_maes,
         marker=dict(
             color=[MODEL_COLORS.get(m, "#B0B5C0") for m in models],
             line=dict(color="rgba(255,255,255,0.1)", width=1),
         ),
-        text=[f"{v:.1f}%" for v in avg_mapes],
+        text=[f"{v:.2f}" for v in avg_maes],
         textposition="outside",
         textfont=dict(color="#F5F5F5"),
-        hovertemplate="<b>%{x}</b><br>Avg MAPE: %{y:.2f}%<extra></extra>",
+        hovertemplate="<b>%{x}</b><br>Avg MAE: %{y:.2f}<extra></extra>",
     ))
-    fig.update_layout(yaxis_title="Average MAPE (%)")
-    return _apply_dark(fig, "Average MAPE by Model (All 8 Categories)")
+    fig.update_layout(yaxis_title="Average MAE (units)")
+    return _apply_dark(fig, "Average MAE by Model (All 8 Categories)")
 
 
 def severity_donut(results: list[dict]) -> go.Figure:

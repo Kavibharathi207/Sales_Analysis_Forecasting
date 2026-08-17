@@ -29,12 +29,12 @@ CAT_NAMES = {
 MODELS = ["prophet", "arima", "sarima", "lightgbm", "lstm"]
 
 
-def _get_mape(metrics: dict | None, category: str, model: str) -> float | None:
+def _get_mae(metrics: dict | None, category: str, model: str) -> float | None:
     if not metrics:
         return None
     cat = metrics.get(category, {})
     m_data = cat.get(model, {})
-    v = m_data.get("MAPE") or m_data.get("MAPE_%")
+    v = m_data.get("MAE")
     return float(v) if v is not None else None
 
 
@@ -105,9 +105,8 @@ def render():
         kpi_card("📈", "Avg Daily Forecast", fmt_num(sum(preds)/len(preds) if preds else 0, 2),
                  accent="#FFD700")
     with c4:
-        mape = _get_mape(metrics, category, model)
-        color = "#00FF88" if mape and mape <= 20 else ("#FFD700" if mape and mape <= 30 else "#FF6B35")
-        kpi_card("🎯", "Model MAPE", fmt_pct(mape), accent=color)
+        mae = _get_mae(metrics, category, model)
+        kpi_card("🎯", "Model MAE", fmt_num(mae, 2) if mae else "N/A", accent="#00FF88")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -126,13 +125,12 @@ def render():
         if preds:
             rmse = _get_rmse(metrics, category, model)
             summary_data = {
-                "Metric": ["Min Forecast", "Max Forecast", "Std Dev", "MAPE", "RMSE"],
+                "Metric": ["Min Forecast", "Max Forecast", "Std Dev", "MAE", "RMSE"],
                 "Value": [
                     fmt_num(min(preds), 2),
                     fmt_num(max(preds), 2),
                     fmt_num(pd.Series(preds).std(), 2),
-                    fmt_pct(mape),
-                    fmt_num(rmse, 2) if rmse else "N/A",
+                    fmt_num(mae, 2) if mae else "N/A",
                 ],
             }
             st.dataframe(pd.DataFrame(summary_data), hide_index=True, use_container_width=True)

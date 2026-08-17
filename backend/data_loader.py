@@ -111,6 +111,26 @@ def load_actuals(category: str) -> pd.DataFrame:
     return df
 
 
+def load_mae(category: str, model: str) -> Optional[float]:
+    """
+    Load the MAE value for a category from the model's evaluation CSV.
+    Returns None if the file or row is missing.
+    """
+    eval_path = FORECAST_DIR / f"{model}_evaluation.csv"
+    if not eval_path.exists():
+        return None
+    try:
+        df = pd.read_csv(eval_path)
+        cat_col = "category" if "category" in df.columns else df.columns[0]
+        row = df[df[cat_col] == category]
+        if row.empty:
+            return None
+        val = row["MAE"].iloc[0] if "MAE" in row.columns else None
+        return float(val) if pd.notna(val) else None
+    except Exception:
+        return None
+
+
 def load_mape(category: str, model: str) -> Optional[float]:
     """
     Load the MAPE value for a category from the model's evaluation CSV.

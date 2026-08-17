@@ -54,7 +54,7 @@ def _all_categories_summary(is_connected: bool) -> None:
             "Top Signal": top.get("signal", "—"),
             "Priority": top.get("priority", "—"),
             "Trend %": fmt_pct(data.get("forecast_trend_pct")),
-            "MAPE": fmt_pct(data.get("model_mape")),
+            "MAE": fmt_num(data.get("model_mae"), 2) if data.get("model_mae") is not None else fmt_pct(data.get("model_mape")),
             "Anomalies": str(data.get("anomaly_count", 0)),
         })
 
@@ -156,8 +156,9 @@ def render():
         trend_color = "#00FF88" if (trend or 0) >= 0 else "#FF4444"
         kpi_card("📈", "Forecast Trend", fmt_pct(trend), accent=trend_color)
     with c2:
-        mape_col = "#00FF88" if mape and mape <= 20 else ("#FFD700" if mape and mape <= 30 else "#FF6B35")
-        kpi_card("🎯", "Model MAPE", fmt_pct(mape), accent=mape_col)
+        mae = data.get("model_mae")
+        mae_str = fmt_num(mae, 2) if mae is not None else fmt_pct(data.get("model_mape"))
+        kpi_card("🎯", "Model MAE", mae_str, accent="#00FF88")
     with c3:
         kpi_card("🚨", "Anomaly Count", str(a_cnt),
                  accent="#FF4444" if a_cnt > 0 else "#00FF88")

@@ -76,31 +76,38 @@ def render():
             st.warning("⚠️ Metrics data unavailable. Run training to generate metrics.json.")
             return
 
-        section_title("🌡️", "MAPE Heatmap — All Categories × Models")
+        section_title("🌡️", "MAE Heatmap — All Categories × Models")
         fig = mape_heatmap(metrics)
         fig.update_layout(height=500)
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        section_title("📊", "Average MAPE by Model (All 8 Categories)")
+        section_title("📊", "Average MAE by Model (All 8 Categories)")
         bar = model_bar_chart(metrics)
         bar.update_layout(height=380)
         st.plotly_chart(bar, use_container_width=True)
 
-        # Best-model per category table
+        # Best-model per category table (lowest MAE)
         st.markdown("<br>", unsafe_allow_html=True)
-        section_title("⭐", "Best Model per Category")
+        section_title("⭐", "Best Model per Category (Lowest MAE)")
         rows = []
         for cat in CATEGORIES:
             cat_d = metrics.get(cat, {})
-            best = cat_d.get("best_model", "—")
-            best_mape = None
-            if best != "—":
-                m_d = cat_d.get(best, {})
-                v = m_d.get("MAPE") or m_d.get("MAPE_%")
-                best_mape = float(v) if v is not None else None
+            best = "prophet"
+            best_mae = float("inf")
+            for m in ["prophet", "arima", "sarima", "lightgbm", "lstm"]:
+                m_d = cat_d.get(m, {})
+                if isinstance(m_d, dict) and "MAE" in m_d:
+                    try:
+                        val = float(m_d["MAE"])
+                        if val < best_mae:
+                            best_mae = val
+                            best = m
+                    except Exception:
+                        pass
+            best_val = cat_d.get(best, {}).get("MAE") if best else None
             rows.append({"Category": cat, "Best Model": best.upper() if best else "—",
-                         "MAPE %": fmt_pct(best_mape)})
+                         "MAE (units)": fmt_num(best_val, 2) if best_val is not None else "N/A"})
         df_best = pd.DataFrame(rows)
 
         def _color_best(val):
@@ -121,11 +128,23 @@ def render():
             st.warning("⚠️ No comparison data for this category.")
             return
 
-        best = cmp_data.get("best_model", "")
-        st.markdown(f"Best Model: {_best_model_badge(best)}", unsafe_allow_html=True)
+        # determine best model by lowest MAE
+        models_data = cmp_data.get("models", {})
+        best = "prophet"
+        best_mae = float("inf")
+        for m, m_data in models_data.items():
+            if isinstance(m_data, dict) and "MAE" in m_data:
+                try:
+                    val = float(m_data["MAE"])
+                    if val < best_mae:
+                        best_mae = val
+                        best = m
+                except Exception:
+                    pass
+
+        st.markdown(f"Best Model (Lowest MAE): {_best_model_badge(best)}", unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
 
-        models_data = cmp_data.get("models", {})
         rows = []
         for m, m_data in models_data.items():
             if not isinstance(m_data, dict):
@@ -135,9 +154,9 @@ def render():
             mae  = m_data.get("MAE")
             rows.append({
                 "Model": m.upper(),
-                "MAPE %": fmt_pct(float(mape)) if mape is not None else "N/A",
-                "RMSE":   fmt_num(float(rmse), 2) if rmse is not None else "N/A",
                 "MAE":    fmt_num(float(mae), 2) if mae is not None else "N/A",
+                "RMSE":   fmt_num(float(rmse), 2) if rmse is not None else "N/A",
+                "MAPE %": fmt_pct(float(mape)) if mape is not None else "N/A",
                 "Status": "⭐ Best" if m == best else "",
             })
         df_cmp = pd.DataFrame(rows)
@@ -151,31 +170,31 @@ def render():
             use_container_width=True, hide_index=True,
         )
 
-        # Bar chart for this category
+        # Bar chart for this category (MAE)
         if rows:
-            mape_vals = []
+            mae_vals = []
             model_names = []
             for r in rows:
-                if r["MAPE %"] != "N/A":
+                if r["MAE"] != "N/A":
                     try:
-                        mape_vals.append(float(r["MAPE %"].replace("%","")))
+                        mae_vals.append(float(r["MAE"].replace(",","")))
                         model_names.append(r["Model"])
                     except Exception:
                         pass
 
-            if mape_vals:
+            if mae_vals:
                 fig = go.Figure(go.Bar(
-                    x=model_names, y=mape_vals,
+                    x=model_names, y=mae_vals,
                     marker=dict(
                         color=[MODEL_COLORS.get(m.lower(), "#B0B5C0") for m in model_names],
                         line=dict(color="rgba(255,255,255,0.1)", width=1),
                     ),
-                    text=[f"{v:.1f}%" for v in mape_vals],
+                    text=[f"{v:.2f}" for v in mae_vals],
                     textposition="outside",
-                    hovertemplate="<b>%{x}</b><br>MAPE: %{y:.2f}%<extra></extra>",
+                    hovertemplate="<b>%{x}</b><br>MAE: %{y:.2f}<extra></extra>",
                 ))
-                fig.update_layout(yaxis_title="MAPE (%)", height=350)
-                st.plotly_chart(_apply_dark(fig, f"{category} — Model MAPE Comparison"),
+                fig.update_layout(yaxis_title="MAE (units)", height=350)
+                st.plotly_chart(_apply_dark(fig, f"{category} — Model MAE Comparison"),
                                 use_container_width=True)
 
     # ── OVERLAY CHART ─────────────────────────────────────────────────────────

@@ -18,7 +18,7 @@ Rules:
     Otherwise                      → STABLE_SUPPLY      (LOW)
 """
 
-from backend.data_loader import load_forecast, load_test_period, load_actuals, load_mape
+from backend.data_loader import load_forecast, load_test_period, load_actuals, load_mape, load_mae
 from backend.schemas.recommendation import (
     RecommendationRequest, RecommendationResponse, Recommendation,
 )
@@ -64,6 +64,7 @@ def generate_recommendations(request: RecommendationRequest) -> RecommendationRe
     test_df     = load_test_period(request.category, request.model) # test rows → anomaly count
     actuals_df  = load_actuals(request.category)
     mape        = load_mape(request.category, request.model)
+    mae         = load_mae(request.category, request.model)
 
     trend = _compute_trend(forecast_df)
     anomaly_count, high_severity_count = _count_anomalies(test_df, actuals_df)
@@ -152,6 +153,7 @@ def generate_recommendations(request: RecommendationRequest) -> RecommendationRe
         model=request.model,
         forecast_trend_pct=trend,
         model_mape=mape,
+        model_mae=mae,
         anomaly_count=anomaly_count,
         recommendations=recs,
     )

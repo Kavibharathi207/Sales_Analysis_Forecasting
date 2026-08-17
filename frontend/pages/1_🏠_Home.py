@@ -34,8 +34,20 @@ HORIZON = 30   # days for quick overview forecasts
 
 
 def _best_model_for(metrics: dict, category: str) -> str:
-    cat = metrics.get(category, {})
-    return cat.get("best_model", "prophet")
+    cat_data = metrics.get(category, {})
+    best_model = cat_data.get("best_model", "prophet")
+    best_mae = float("inf")
+    for m in ["prophet", "arima", "sarima", "lightgbm", "lstm"]:
+        m_d = cat_data.get(m, {})
+        if isinstance(m_d, dict) and "MAE" in m_d:
+            try:
+                val = float(m_d["MAE"])
+                if val < best_mae:
+                    best_mae = val
+                    best_model = m
+            except Exception:
+                pass
+    return best_model
 
 
 def _trend_pct(forecast_data: dict | None) -> float | None:
@@ -60,29 +72,29 @@ def _render_kpis(metrics: dict | None, models_data: dict | None, is_connected: b
         kpi_card("🏥", "Drug Categories", "8", accent="#00D9FF")
 
     with col2:
-        model_list = models_data.get("models", []) if models_data else []
-        kpi_card("🤖", "Active Models", str(len(model_list)) if model_list else "5",
+        num_models = len(models_data) if models_data else 5
+        kpi_card("🤖", "Active Models", str(num_models),
                  accent="#00FF88")
 
     with col3:
         if metrics:
-            all_mapes = []
+            all_maes = []
             for cat in CATEGORIES:
                 cat_d = metrics.get(cat, {})
                 for m_d in cat_d.values():
                     if isinstance(m_d, dict):
-                        v = m_d.get("MAPE") or m_d.get("MAPE_%")
+                        v = m_d.get("MAE")
                         if v is not None:
-                            all_mapes.append(float(v))
-            avg = round(sum(all_mapes) / len(all_mapes), 1) if all_mapes else None
-            kpi_card("🎯", "Avg. MAPE (All)", fmt_pct(avg), accent="#FFD700")
+                            all_maes.append(float(v))
+            avg = round(sum(all_maes) / len(all_maes), 2) if all_maes else None
+            kpi_card("🎯", "Avg. MAE (All)", f"{avg:.2f}" if avg else "N/A", accent="#FFD700")
         else:
-            kpi_card("🎯", "Avg. MAPE (All)", "N/A", accent="#FFD700")
+            kpi_card("🎯", "Avg. MAE (All)", "N/A", accent="#FFD700")
 
 
 def _render_category_grid(metrics: dict | None, is_connected: bool):
     section_title("📦", "Category Overview")
-    st.caption("Best model selected automatically per category based on lowest MAPE.")
+    st.caption("Best model selected automatically per category based on lowest MAE.")
 
     cols = st.columns(4)
     for i, cat in enumerate(CATEGORIES):
