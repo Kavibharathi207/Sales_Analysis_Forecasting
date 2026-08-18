@@ -131,6 +131,7 @@ def render():
                     fmt_num(max(preds), 2),
                     fmt_num(pd.Series(preds).std(), 2),
                     fmt_num(mae, 2) if mae else "N/A",
+                    fmt_num(rmse, 2) if rmse else "N/A",
                 ],
             }
             st.dataframe(pd.DataFrame(summary_data), hide_index=True, use_container_width=True)
