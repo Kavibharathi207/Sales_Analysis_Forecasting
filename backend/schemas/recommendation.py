@@ -18,6 +18,7 @@ class RecommendationResponse(BaseModel):
     category: str
     model: str
     forecast_trend_pct: float
-    model_mape: Optional[float]
+    model_mape: Optional[float] = None
+    model_mae: Optional[float] = None
     anomaly_count: int
     recommendations: List[Recommendation]
